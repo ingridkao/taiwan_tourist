@@ -1,13 +1,16 @@
 <script setup>
-import Header from './components/Header.vue'
+// import Header from './components/Header.vue'
 </script>
 
 <template>
-  <Header/>
+  <!-- <Header/> -->
   <router-view />
 </template>
 
 <style>
+body{
+  background-color: #222
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
