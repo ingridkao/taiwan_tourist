@@ -2,14 +2,19 @@ import { createRouter, createWebHistory } from "vue-router"
 const routes = [
     {
       path: "/",
-      name: "Home",
-      component: () => import("/src/components/Home.vue")
+      name: "LandingPage",
+      component: () => import("/src/components/LandingPage.vue")
     },
     {
-      path: "/setting",
-      name: "Setting",
-      component: () => import("/src/components/Setting.vue")
-    }
+      path: "/guide/:city",
+      name: "Guide",
+      component: () => import("/src/components/Guide.vue")
+    },
+    // {
+    //   path: "/setting",
+    //   name: "Setting",
+    //   component: () => import("/src/components/Setting.vue")
+    // }
 ]
 export default createRouter({
     history: createWebHistory(),

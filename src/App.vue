@@ -7,16 +7,37 @@
   <router-view />
 </template>
 
-<style>
-body{
-  background-color: #222
+<style lang="scss">
+[data-theme="dark"] {
+  --bg-color1: #2c3e50;
+  --font-color: #fff;
+}
+[data-theme="light"] {
+  --bg-color1: #fff;
+  --font-color: #2c3e50;
+}
+*{
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: var(--bg-color1);
+  color: var(--font-color);
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+button{
+  border-radius: 8px;
+  font-size: 14px;
+  padding: 6px;
+  cursor: pointer;
+}
+input{
+  outline: none;
+  padding: 0 0.5rem;
 }
 </style>
