@@ -1,3 +1,6 @@
+import axios from 'axios'
+import jsSHA from 'jssha'
+
 export const GetAuthorizationHeader = () => {
     const AppID = 'fe8a15a3865248428e81f3357ca752f9'
     const AppKey = '-KKFfJvNKRJrNP85dJXH0IoadNg'
@@ -12,15 +15,20 @@ export const GetAuthorizationHeader = () => {
     return { 'Authorization': Authorization, 'X-Date': GMTString /*,'Accept-Encoding': 'gzip'*/}; //如果要將js運行在伺服器，可額外加入 'Accept-Encoding': 'gzip'，要求壓縮以減少網路傳輸資料量
 }
 
-export const GetTdxData = () => {
-    const url = 'https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/Station?$top=10&$format=JSON' //欲呼叫之API網址(此範例為台鐵車站資料)
-    fetch(url,{
-        headers: new Headers({
-            'Content-Type': 'application/json'
-        })
+export const GetTdxData = (inputUrl, params={}) => {
+    const init = 'https://ptx.transportdata.tw/MOTC'
+    const paramsObj = {
+        '$top': 10, 
+        format: 'JSON',
+        ...params
+    }
+    const searchParams = new URLSearchParams(paramsObj)
+    const fetchurl = `${init}${inputUrl? inputUrl: '/v2/Rail/TRA/Station'}${searchParams.toString() === ''? '': '?' + searchParams.toString()}`
+    return axios.get(fetchurl,{
+        headers: GetAuthorizationHeader()
     })
     .then((response) => {
-        return response
+        return response.data
     })
     .catch(error => {
         return error
@@ -51,3 +59,30 @@ export const citiy = {
     PenghuCounty: "澎湖縣",
     LienchiangCounty: "連江縣",
 }
+
+export const apiType = [
+    {
+        index: 'ScenicSpot',
+        title: '熱門景點',
+        name: '景點',
+        url: '/v2/Tourism/ScenicSpot'
+    },
+    {
+        index: 'Activity',
+        title: '觀光活動',
+        name: '活動',
+        url: '/v2/Tourism/Activity'
+    },
+    {
+        index: 'Restaurant',
+        title: '美食品嚐',
+        name: '餐飲',
+        url: '/v2/Tourism/Restaurant'
+    },
+    {
+        index: 'Hotel',
+        title: '住宿推薦',
+        name: '住宿',
+        url: '/v2/Tourism/Hotel'
+    }
+]

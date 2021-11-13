@@ -29,7 +29,7 @@ export default defineComponent({
     routeTo(){
       const targetCity = Object.values(citiy).findIndex(item => item === this.citySelect)
       const cityIndex = Object.keys(citiy)[targetCity] 
-      console.log(cityIndex);
+      // console.log(cityIndex);
       this.$router.push({ 
         name: 'Guide', 
         params: { 
@@ -83,7 +83,6 @@ aside{
   background: #FAFAFA;
   border-radius: 8px;
   padding: 0.55rem;
-  box-sizing: border-box;
   border: 1px solid rgba(0, 0, 0, 0.08);
   .inputBox{
     display: flex;

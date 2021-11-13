@@ -19,6 +19,7 @@
 *{
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 body {
   background-color: var(--bg-color1);
@@ -39,5 +40,15 @@ button{
 input{
   outline: none;
   padding: 0 0.5rem;
+}
+a{
+  text-decoration: none;
+  color: #3FB195;
+}
+.textBtn{
+  color: #3FB195;
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
 }
 </style>

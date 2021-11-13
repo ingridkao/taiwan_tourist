@@ -47,13 +47,13 @@ export default defineComponent({
         <img :src="Illustration" alt="Illustration">
       </div>
     </main>
-    <!-- {{place_data[1]}} -->
-    <!-- {{placeName}} -->
   </div>
 </template>
 
 <style lang="scss" scoped>
 .container{
+  max-width: 1680px;
+  margin: auto;
   >*{
     padding: 1rem;
     display: flex;
