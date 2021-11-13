@@ -10,6 +10,11 @@ const routes = [
       name: "Guide",
       component: () => import("/src/components/Guide.vue")
     },
+    {
+      path: "/touism/:city/:type",
+      name: "Touism",
+      component: () => import("/src/components/Touism.vue")
+    },
     // {
     //   path: "/setting",
     //   name: "Setting",

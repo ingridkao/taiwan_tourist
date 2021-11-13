@@ -1,16 +1,28 @@
 <script>
 import { defineComponent } from "vue"
+import { mapState } from "vuex"
+
 import Close from '/src/assets/img/close.svg'
+import Search from '/src/assets/img/Search.svg'
 import Arrow from '/src/assets/img/arrow.svg'
 import {citiy} from "/src/assets/js/commom.js"
 export default defineComponent({
   data(){
     return {
       Close,
+      Search,
       Arrow,
+      routeName: null,
       citiyOption: citiy,
       cityBoxToggle:false,
-      citySelect: null
+      citySelect: null,
+      keyword: this.searchtext
+    }
+  },
+  created(){
+    this.routeName = this.$route.name
+    if(this.$route.params && this.$route.params.city){
+      this.citySelect = citiy[this.$route.params.city] 
     }
   },
   mounted() {
@@ -19,33 +31,64 @@ export default defineComponent({
   beforeDestroy() {
     document.removeEventListener("click", this.bodyClose)
   },
-  components: {},
+  computed:{
+    ...mapState(["searchtext"]),
+    landingPage(){
+      return this.routeName === 'LandingPage'
+    }
+  },
+  watch: {
+    $route(to, from) {
+      this.routeName = to.name
+      if(to.params && to.params.city){
+        this.citySelect = citiy[to.params.city] 
+      }
+    } 
+  },
   methods:{
     bodyClose(e) {
       if (this.cityBoxToggle && this.$refs.cityBox && !this.$refs.cityBox.contains(e.target)) {
         this.cityBoxToggle = false
       }
     },
-    routeTo(){
+    startSearch(){
       const targetCity = Object.values(citiy).findIndex(item => item === this.citySelect)
       const cityIndex = Object.keys(citiy)[targetCity] 
-      // console.log(cityIndex);
-      this.$router.push({ 
-        name: 'Guide', 
-        params: { 
-          city: cityIndex
-        }
-      })
+      if(this.landingPage){
+        this.$router.push({ 
+          name: 'Guide', 
+          params: { 
+            city: cityIndex
+          }
+        })
+      }else{
+        this.$store.commit("keyinKeyword", this.keyword)
+      }
+    },
+    clearSearch(){
+      this.keyword = ''
+      this.$store.commit("keyinKeyword", this.keyword)
     }
   }
 })
 </script>
 <template>
   <aside>
+    <div v-if="!landingPage" class="selectBox text">
+      <div class="inputBox">
+        <input type="text" v-model="keyword" placeholder="搜尋關鍵字">
+      </div>
+      <button v-if="keyword != ''" @click="clearSearch">
+        <img :src="Close" alt="Close"/>
+      </button>
+      <button v-else>
+        <img :src="Search" alt="Search"/>
+      </button>
+    </div>
     <div class="selectBox">
       <div class="inputBox">
         <p>{{citySelect? citySelect: '目的地'}}</p>
-        <button v-if="citySelect" @click="citySelect = null">
+        <button v-if="citySelect && landingPage" @click="citySelect = null">
           <img :src="Close" alt="Close"/>
         </button>
       </div>
@@ -61,7 +104,7 @@ export default defineComponent({
         @click="citySelect = item"
       >{{item}}</button>
     </div>
-    <button class="search" v-if="citySelect" @click="routeTo">開始搜尋</button>
+    <button class="search" v-if="citySelect" @click="startSearch">開始搜尋</button>
   </aside>
 </template>
 
@@ -82,8 +125,12 @@ aside{
   justify-content: space-between;
   background: #FAFAFA;
   border-radius: 8px;
-  padding: 0.55rem;
+  margin-bottom: 1rem;
+  padding: 0.25rem 0.55rem 0.25rem 1rem;
   border: 1px solid rgba(0, 0, 0, 0.08);
+  &.text .inputBox{
+    flex: 0 0 calc(100% - 2rem);
+  }
   .inputBox{
     display: flex;
     flex-direction: row;
@@ -91,14 +138,13 @@ aside{
     flex: 0 0 4em;
     p{
       width: 3em;
-      font-size: 18px;
+      font-size: 1rem;
       font-weight: normal;
       color: #222;
       padding: 0;
     }
     button{
       width: 1em;
-      // height: 18px;
       padding: 0;
     }
   }
@@ -130,7 +176,7 @@ button{
   transition: 1s ease-in-out;
   height: 0;
   &.show{
-    padding: 1rem;
+    padding: .25rem;
     height: 22rem;
   }
   button{
@@ -148,7 +194,7 @@ button{
   background: #3FB195;
   color: #FFFFFF;
   font-size: 18px;
-  margin: 0.5rem;
+  margin: 0.5rem auto;
   text-align: center;
 }
 @media only screen and (max-width: 640px) {

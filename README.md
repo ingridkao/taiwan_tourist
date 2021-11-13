@@ -11,3 +11,11 @@ https://stackoverflow.com/questions/68131954/how-to-use-sass-using-in-vuejs3-vit
 npm install -D sass
 yarn add -D sass
 `
+
+
+使用vite
+在安裝vuex的時候發生錯誤，大概出現像下面這個error
+does not provide an export named 'createRouter'
+
+npm uninstall vuex
+npm i --save vuex@next

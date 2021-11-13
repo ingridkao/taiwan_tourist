@@ -1,6 +1,8 @@
 <script>
 import {defineComponent } from 'vue'
-import {GetTdxData} from "/src/assets/js/commom.js"
+import { mapState } from "vuex"
+
+import {GetTdxMultData} from "/src/assets/js/commom.js"
 import {citiy, apiType} from "/src/assets/js/commom.js"
 import Illustration from '/src/assets/img/illustration.svg'
 import Time from '/src/assets/img/Time.svg'
@@ -8,6 +10,9 @@ import share from '/src/assets/img/share.svg'
 import loction from '/src/assets/img/Location.svg'
 import loction_g from '/src/assets/img/Location_g.svg'
 import calling from '/src/assets/img/Calling.svg'
+import LogoMini from '/src/assets/img/logo_mini.svg'
+
+import AsideMenu from "/src/components/AsideMenu.vue"
 
 export default defineComponent({
   data(){
@@ -16,7 +21,7 @@ export default defineComponent({
       mainData: [],
       citiy,
       apiType,
-      Illustration,Time,share,loction, loction_g, calling
+      Illustration,Time,share,loction, loction_g, calling, LogoMini
     }
   },
   created(){
@@ -25,27 +30,64 @@ export default defineComponent({
     }
   },
   mounted() {
-    if(this.currentCity){
-      const check = Object.keys(citiy).find(item => item === this.currentCity)
-      if(check){
-        apiType.map(item => {
-          GetTdxData(
-            `${item.url}/${this.currentCity}`, 
-            {
-              '$top': 3,
-              '$skip': Math.floor(Math.random()*10)
-            }
-          ).then(res=>{
-            console.log(res);
-            this.mainData.push(res)
-          })
-        })
+    this.fetchData()
+  },
+  computed:{
+    ...mapState(["searchtext"])
+  },
+  watch: {
+    $route(to, from) {
+      if(to.params && to.params.city){
+        this.currentCity = to.params.city
+        this.fetchData()
       }
+    },
+    'searchtext'(){
+      this.fetchData()
     }
   },
+  components: {AsideMenu},
   methods: {
+    fetchData(){
+      if(this.currentCity){
+        const check = Object.keys(citiy).find(item => item === this.currentCity)
+        if(check){
+          this.mainData = []
+          const requestArray = []
+          const params = {'$top': 3}
+          if(this.searchtext){
+              params['$filter'] = `contains(Name,'${this.searchtext}')`
+          }
+          apiType.map(item => {
+            requestArray.push({
+              url: `${item.url}/${this.currentCity}`, 
+              params
+            })
+          })
+          GetTdxMultData(requestArray).then(res=>{
+            this.mainData = res
+          }).catch(error => {
+              console.log(error);
+          })
+        }else{
+          //back landingpage
+        }
+      }else{
+         //back landingpage
+      }
+    },
     routeToPage3(target){
       console.log(target);
+      this.$router.push({ 
+        name: 'Touism', 
+        params: { 
+          city: this.currentCity,
+          type: target
+              // 'ID': cardItem.ID
+        }
+      })
+
+
     },
     routeToPage4(cardItem){
       console.log(cardItem.ID);
@@ -56,17 +98,20 @@ export default defineComponent({
               // 'ID': cardItem.ID
       //   }
       // })
+    },
+    getCity(target, index){
+      return apiType[target]? apiType[target][index]: '-'
+    },
+    test(e){
+      console.log(e);
     }
   }
 })
-
 </script>
 
 <template>
-<main id="guidePage" class="container">
-  <aside>
-    1
-  </aside>
+<main id="guidePage" class="page_container">
+  <AsideMenu @update="test"/>
   <div>
     <header>
       <div>
@@ -75,14 +120,15 @@ export default defineComponent({
       </div>
       <img :src="Illustration" alt="Illustration">
     </header>
+
     <div v-for="(dataItem, dataIndex) in mainData" :key="dataIndex">
       <div class="mainData_container" v-if="dataItem.length>0">
         <h4 class="titleBox">
           <div class="iconText">
             <img :src="loction">
-            <span>{{apiType[dataIndex]['title']}}</span>
+            <span>{{getCity(dataIndex, 'title')}}</span>
           </div>
-          <button class="textBtn" @click="routeToPage3(apiType[dataIndex]['index'])">更多{{apiType[dataIndex]['name']}}推薦</button>
+          <button class="textBtn" @click="routeToPage3(getCity(dataIndex, 'index'))">更多{{getCity(dataIndex,'name')}}推薦</button>
         </h4>
         <div class="card_container">
           <div v-for="(cardItem, cardIndex) in dataItem" :key="cardIndex" class="cardItem" @click="routeToPage4(cardItem)">
@@ -121,31 +167,15 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-#guidePage{
-  display: flex;
-  // flex-wrap: wrap;
-  flex-direction: row;
-  background: #F4F4F4;
-  width: 100vw;
-  >aside{
-    flex: 0 0 14rem;
-  }
+$shadow: 0px 14px 24px rgba(0, 0, 0, 0.04);
+.page_container{
   >div{
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: calc(100vw - 14rem);
-    width: 100%;
-    padding: 1rem;
-    >*{
-      width: 100%;
-      padding: 0.5rem 1rem 0 1rem;
-    }
     header{
       display: flex;
       justify-content: space-between;
       align-items: center;
       height: 18rem;
-      box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.04);
+      box-shadow: $shadow;
       background: #fff;
       border-radius: 16px;
       >div{
@@ -157,45 +187,8 @@ export default defineComponent({
       }
     }
   }
-  // main{
-  //   flex-wrap: wrap;
-  //   flex-direction: row;
-  //   height: 30rem;
-  //   >*{
-  //     display: flex;
-  //     justify-content: start;
-  //     align-items: center;
-  //     flex: 1;
-  //   }
+}
 
-  //   .illustrationBox{
-  //     flex-grow: 1;
-  //     flex-shrink: 1;
-  //     flex-basis: min-content;
-  //     padding: 0 10%;
-  //     img{
-  //       width: 100%;
-  //     }
-  //   }
-  // }
-}
-// .logo_box{
-//   height: 5rem;
-//   img{
-//     height: 100%;
-//     &.big{
-//       display: block;
-//     }
-//     &.small{
-//       display: none;
-//     }
-//   }
-// }
-.ellipsis{
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 .mainData_container{
   width: 100%;
   text-align: left;
@@ -204,16 +197,6 @@ export default defineComponent({
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    font-size: 1.25rem;
-  }
-  .card_container{
-    display: flex;
-    flex-direction: row;
-    align-items: start;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    width: 100%;
-    padding: 0.5rem 0;
   }
 }
 .cardItem{
@@ -222,9 +205,10 @@ export default defineComponent({
   overflow: hidden;
   background: #fff;
   cursor: pointer;
+  margin: 0.5rem 0;
+  box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.04);
   .imgBox{
-    // width: 100%;
-    height: 15.25rem;
+    height: 12rem;
     overflow: hidden;
     text-align: center;
     img{
@@ -233,28 +217,9 @@ export default defineComponent({
   }
   .textBox{
     padding: 0.5rem 1rem 1rem 1rem;
-    h5{
-      font-size: 1.1rem;
-      margin-bottom: .5rem;
-    }
-    h6{
-      color: rgba(0,0,0,0.6);
-      font-size: 1rem;
-      font-weight: normal;
-    }
   }
 }
-.iconText{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    img{
-      margin-right: 0.5rem;
-    }
-    &.inline{
-      display: inline-flex;
-    }
-}
+
 
 @media only screen and (max-width: 640px) {
 //   .container{

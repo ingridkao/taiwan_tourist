@@ -15,12 +15,15 @@ export const GetAuthorizationHeader = () => {
     return { 'Authorization': Authorization, 'X-Date': GMTString /*,'Accept-Encoding': 'gzip'*/}; //如果要將js運行在伺服器，可額外加入 'Accept-Encoding': 'gzip'，要求壓縮以減少網路傳輸資料量
 }
 
+const init = 'https://ptx.transportdata.tw/MOTC'
+
 export const GetTdxData = (inputUrl, params={}) => {
-    const init = 'https://ptx.transportdata.tw/MOTC'
     const paramsObj = {
-        '$top': 10, 
         format: 'JSON',
         ...params
+    }
+    if(params && params.$filter){
+        paramsObj['$orderby'] = 'SrcUpdateTime'
     }
     const searchParams = new URLSearchParams(paramsObj)
     const fetchurl = `${init}${inputUrl? inputUrl: '/v2/Rail/TRA/Station'}${searchParams.toString() === ''? '': '?' + searchParams.toString()}`
@@ -31,6 +34,37 @@ export const GetTdxData = (inputUrl, params={}) => {
         return response.data
     })
     .catch(error => {
+        return error
+    })
+}
+
+const axiosInstance = axios.create({
+    headers: GetAuthorizationHeader()
+})
+
+export const GetTdxMultData = (requstArray=[]) => {
+    const allData = []
+    requstArray.map(item => { 
+        const param = {
+            format: 'JSON',
+            '$top': 10, 
+            ...item.params
+        }
+        if(item.params && item.params.$filter){
+            param['$orderby'] = 'SrcUpdateTime'
+        }
+        const searchParams = new URLSearchParams(param)
+        const fetchurl = `${init}${item.url}?${searchParams.toString()}`
+        allData.push(axiosInstance.get(fetchurl))
+    })
+
+    return axios.all(allData).then((arrayResData) => {
+        const resDatas = []
+        arrayResData.map(res => {
+            resDatas.push(res.data)
+        })
+        return resDatas
+    }).catch(error => {
         return error
     })
 }
@@ -67,22 +101,22 @@ export const apiType = [
         name: '景點',
         url: '/v2/Tourism/ScenicSpot'
     },
-    {
-        index: 'Activity',
-        title: '觀光活動',
-        name: '活動',
-        url: '/v2/Tourism/Activity'
-    },
-    {
-        index: 'Restaurant',
-        title: '美食品嚐',
-        name: '餐飲',
-        url: '/v2/Tourism/Restaurant'
-    },
-    {
-        index: 'Hotel',
-        title: '住宿推薦',
-        name: '住宿',
-        url: '/v2/Tourism/Hotel'
-    }
+    // {
+    //     index: 'Activity',
+    //     title: '觀光活動',
+    //     name: '活動',
+    //     url: '/v2/Tourism/Activity'
+    // },
+    // {
+    //     index: 'Restaurant',
+    //     title: '美食品嚐',
+    //     name: '餐飲',
+    //     url: '/v2/Tourism/Restaurant'
+    // },
+    // {
+    //     index: 'Hotel',
+    //     title: '住宿推薦',
+    //     name: '住宿',
+    //     url: '/v2/Tourism/Hotel'
+    // }
 ]
