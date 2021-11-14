@@ -11,7 +11,15 @@ import calling from '/src/assets/img/Calling.svg'
 export default defineComponent({
     data(){
         return {
+            currentType: null,
+            currentCity: null,
             Illustration,Time,share,loction, loction_g, calling
+        }
+    },
+    created(){
+        if(this.$route.params){
+            this.currentType = this.$route.params.type
+            this.currentCity = this.$route.params.city
         }
     },
     props: {
@@ -24,17 +32,17 @@ export default defineComponent({
             default: () => {}
         },
     },
-    // components: {},
     methods:{
         routeToPage4(cardItem){
-        console.log(cardItem.ID);
-        // this.$router.push({ 
-        //   name: 'Guide', 
-        //   params: { 
-        //     city: cityIndex,
-                // 'ID': cardItem.ID
-        //   }
-        // })
+            this.$store.commit("setInformationObj", cardItem)
+            this.$router.push({ 
+                name: 'Information', 
+                params:{
+                    type: this.currentType,
+                    city: this.currentCity,
+                    id: cardItem.ID
+                }
+            })
         }
     }
 })
@@ -72,36 +80,3 @@ export default defineComponent({
     </div>
 </div>
 </template>
-<style lang="scss" scoped>
-.cardItem{
-    position: relative;
-    flex: 0 0 32%;
-    cursor: pointer;
-    margin: 0.5rem 0;
-    overflow: hidden;
-    box-shadow: 0px 14px 24px rgba(0,0,0,0.1);
-    border-radius: 16px;
-    .imgBox{
-        height: 12rem;
-        text-align: center;
-        border-radius: 16px 16px 0px 0px;
-        overflow: hidden;
-
-        >*{height: 100%;}
-        .imgDiv{
-            background-size: cover;
-            background-position: center;
-        }
-    }
-    .textBox{
-        text-align: left;
-        padding: 0.5rem 1rem;
-        box-sizing: border-box;
-    }
-    &:after{
-        content: '';
-        box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.04);
-    }
-}
-
-</style>

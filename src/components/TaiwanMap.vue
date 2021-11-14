@@ -2,16 +2,14 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-    data(){
-        return {
-            name : ''
-        }
-    },
     methods:{
+        handleStateHover(e){
+            const {name} = e.target.dataset
+            if(name){ this.$emit('info', name) }
+        },
         handleStateClick(e){
             const {name} = e.target.dataset
-            this.name = name
-            this.$emit('update', name)
+            if(name){ this.$emit('update', name) }
         }
     }
 })
@@ -21,6 +19,7 @@ export default defineComponent({
 <svg id="cf503461-00bd-459a-aeb5-062ebc913211" 
     xmlns="http://www.w3.org/2000/svg" 
     viewBox="0 0 595.28 841.89"
+    @mouseover="handleStateHover"
     @click="handleStateClick">
     <path id="161d6372-ac8f-409c-ad51-9db7795c8614" data-name="path2462" d="M236.44,701.51,234,705.75l.67.61.85.24,1.83-.55.37-.73,2.07-2.2,1.95-1.22.31-.67-.18-.73-.73-.37-.3-.61-.61-.49-.85.06-1.4.67-.49.55-.61.31-.37.61-.09.27h0Z" class="96fdfe13-4732-40bb-9e9c-cdc6e310fcb9"></path>
     <path id="302f43cb-d765-4d82-8054-45eb380ec9ba" data-name="path2464" d="M74.57,416v0Z" class="96fdfe13-4732-40bb-9e9c-cdc6e310fcb9"></path>
@@ -102,10 +101,8 @@ path{
   cursor: pointer;
 }
 path:hover{
-  fill: #ddd;
-}
-path.active{
-  fill: #B99362;
+  fill: #3FB195;
   transform: translate(-5px,-5px);
 }
+/* path.active{} */
 </style>

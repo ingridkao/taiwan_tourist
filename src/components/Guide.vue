@@ -4,6 +4,7 @@ import { mapState } from "vuex"
 
 import {GetTdxMultData} from "/src/assets/js/commom.js"
 import {citiy, apiType} from "/src/assets/js/commom.js"
+
 import Illustration from '/src/assets/img/illustration.svg'
 import Time from '/src/assets/img/Time.svg'
 import share from '/src/assets/img/share.svg'
@@ -12,7 +13,7 @@ import loction_g from '/src/assets/img/Location_g.svg'
 import calling from '/src/assets/img/Calling.svg'
 import LogoMini from '/src/assets/img/logo_mini.svg'
 
-import AsideMenu from "/src/components/AsideMenu.vue"
+import PageHeader from "/src/components/PageHeader.vue"
 
 export default defineComponent({
   data(){
@@ -33,7 +34,7 @@ export default defineComponent({
     this.fetchData()
   },
   computed:{
-    ...mapState(["searchtext"])
+    ...mapState(["searchtext", "navToggle", "fullPage"])
   },
   watch: {
     $route(to, from) {
@@ -46,7 +47,7 @@ export default defineComponent({
       this.fetchData()
     }
   },
-  components: {AsideMenu},
+  components: {PageHeader},
   methods: {
     fetchData(){
       if(this.currentCity){
@@ -70,53 +71,45 @@ export default defineComponent({
               console.log(error);
           })
         }else{
-          //back landingpage
+          this.$router.push('/')
         }
       }else{
-         //back landingpage
+         this.$router.push('/')
       }
     },
     routeToPage3(target){
-      console.log(target);
       this.$router.push({ 
         name: 'Touism', 
         params: { 
+          type: target,
           city: this.currentCity,
-          type: target
-              // 'ID': cardItem.ID
         }
       })
-
-
     },
     routeToPage4(cardItem){
-      console.log(cardItem.ID);
-      // this.$router.push({ 
-      //   name: 'Guide', 
-      //   params: { 
-      //     city: cityIndex,
-              // 'ID': cardItem.ID
-      //   }
-      // })
+      this.$store.commit("setInformationObj", cardItem)
+      this.$router.push({ 
+        name: 'Information', 
+        params:{
+          type: target,
+          city: this.currentCity,
+          id: cardItem.ID
+        }
+      })
     },
     getCity(target, index){
       return apiType[target]? apiType[target][index]: '-'
-    },
-    test(e){
-      console.log(e);
     }
   }
 })
 </script>
 
 <template>
-<main id="guidePage" class="page_container">
-  <AsideMenu @update="test"/>
-  <div>
+  <div id="guidePage" class="page_container" :class="{hasHeader: !navToggle, fullPage}">
     <header>
       <div>
-        <h4>探索。</h4>
-        <h4>{{citiy[currentCity]}}</h4>
+        <h3>探索。</h3>
+        <h3>{{citiy[currentCity]}}</h3>
       </div>
       <img :src="Illustration" alt="Illustration">
     </header>
@@ -163,35 +156,32 @@ export default defineComponent({
       </div>
     </div>
   </div>
-</main>
 </template>
 
 <style lang="scss" scoped>
 $shadow: 0px 14px 24px rgba(0, 0, 0, 0.04);
-.page_container{
-  >div{
-    header{
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: 18rem;
-      box-shadow: $shadow;
-      background: #fff;
-      border-radius: 16px;
-      >div{
-        flex: 0 0 6rem;
-        font-size: 2rem;
-      }
-      >img{
-        height: 100%;
-      }
+#guidePage{
+  header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 14rem;
+    box-shadow: $shadow;
+    background: #fff;
+    border-radius: 16px;
+    margin-bottom: 1rem;
+    padding: 1rem 1rem 0 1rem;
+    >div{
+      flex: 0 0 6rem;
+    }
+    >img{
+      height: 100%;
     }
   }
 }
 
 .mainData_container{
   width: 100%;
-  text-align: left;
   .titleBox{
     display: flex;
     flex-direction: row;
@@ -220,29 +210,6 @@ $shadow: 0px 14px 24px rgba(0, 0, 0, 0.04);
   }
 }
 
-
-@media only screen and (max-width: 640px) {
-//   .container{
-//     main{
-//       flex-direction: column-reverse;
-//       height: auto;
-//       .illustrationBox{
-//         width: 60%;
-//         margin: auto;
-//       }
-//     }
-//   }
-//   .logo_box{
-//     height: 3rem;
-//     img{
-//       &.big{
-//         display: none;
-//       }
-//       &.small{
-//         display: block;
-//       }
-//     }
-//   }
-}
+@media only screen and (max-width: 640px) {}
 
 </style>

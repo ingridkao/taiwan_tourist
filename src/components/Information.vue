@@ -5,12 +5,13 @@ import { mapState } from "vuex"
 import {GetTdxData} from "/src/assets/js/commom.js"
 import {citiy, apiType} from "/src/assets/js/commom.js"
 
-import PageHeader from "/src/components/PageHeader.vue"
+import AsideMenu from "/src/components/AsideMenu.vue"
 import Cards from "/src/components/Cards.vue"
 
 export default defineComponent({
   data(){
     return {
+      citiy,
       currentCity : null,
       currentType : null,
       mainData: [],
@@ -21,44 +22,36 @@ export default defineComponent({
     }
   },
   created(){
-    this.checkParams(this.$route.params)
+    if(this.$route.params && (this.$route.params.city || this.$route.params.type)){
+      this.currentCity = this.$route.params.city
+      this.currentType = this.$route.params.type
+    }
   },
   mounted() {
     this.fetchData()
   },
   watch: {
     $route(to, from) {
-      this.checkParams(to.params)
+      if(to.params && (to.params.city || to.params.type)){
+        this.currentCity = to.params.city
+        this.currentType = to.params.type
+        this.fetchData()
+      }else{
+        //back langing page
+      }
     },
-    searchtext(){
+    'searchtext'(){
       this.fetchData()
     }
   },
-  components: {PageHeader, Cards},
+  components: {AsideMenu, Cards},
   computed: {
-    ...mapState(["searchtext", "navToggle", "fullPage"]),
+    ...mapState(["searchtext"]),
     pageCount(){
       return parseInt(this.dataCount/this.limit) + (this.dataCount%this.limit > 0? 1: 0)
-    },
-    cityTitle(){
-      return this.currentCity? citiy[this.currentCity]: ''
-    },
-    apiTypeTitle(){
-      if(!this.currentType)return null
-      const checkType = apiType.find(item => item.index === this.currentType)
-      return checkType.title
     }
   },
   methods: {
-    checkParams(paramsObj){
-      if(paramsObj){
-        this.currentCity = paramsObj.city
-        this.currentType = paramsObj.type
-        this.fetchData()
-      }else{
-        this.$router.push('/')
-      }
-    },
     fetchData(){
       if(this.currentType){
         const checkType = apiType.find(item => item.index === this.currentType)
@@ -78,7 +71,7 @@ export default defineComponent({
           })
         }
       }else{
-        this.$router.push('/')
+        //back langing page
       }
     },
     setPageData(){
@@ -95,10 +88,11 @@ export default defineComponent({
 </script>
 
 <template>
-  <div id="touismPage" class="page_container" :class="{hasHeader: !navToggle, fullPage}">
+<main class="page_container">
+  <AsideMenu/>
+  <div>
     <header>
-      <h4 v-if="currentCity">{{cityTitle}}</h4>
-      <h4 v-else>{{apiTypeTitle}}</h4>
+      <h4 v-if="currentCity">{{citiy[currentCity]}}</h4>
     </header>
     <div class="mainData_container">
       <div class="card_container" v-if="mainData.length > 0">
@@ -118,4 +112,11 @@ export default defineComponent({
       </div>
     </div>
   </div>
+</main>
 </template>
+
+<style lang="scss" scoped>
+@media only screen and (max-width: 640px) {
+}
+
+</style>

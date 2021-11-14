@@ -8,7 +8,7 @@ import Logo from '/src/assets/img/logo.svg'
 import LogoMini from '/src/assets/img/logo_mini.svg'
 import Illustration from '/src/assets/img/illustration.svg'
 
-import citySelector from "/src/components/citySelector.vue"
+import CitySelector from "/src/components/CitySelector.vue"
 
 export default defineComponent({
   name: "LandingPage",
@@ -22,7 +22,7 @@ export default defineComponent({
       placeName: ''
     }
   },
-  components: {citySelector},
+  components: {CitySelector},
   methods:{
     updateLocation(location){
       const answer = this.place_data.filter(item => item.tag === location)
@@ -42,7 +42,7 @@ export default defineComponent({
       </div>
     </header>
     <main>
-      <citySelector/>
+      <CitySelector/>
       <div class="illustrationBox">
         <img :src="Illustration" alt="Illustration">
       </div>
@@ -82,18 +82,6 @@ export default defineComponent({
     }
   }
 }
-.logo_box{
-  height: 5rem;
-  img{
-    height: 100%;
-    &.big{
-      display: block;
-    }
-    &.small{
-      display: none;
-    }
-  }
-}
 @media only screen and (max-width: 640px) {
   .container{
     main{
@@ -102,17 +90,6 @@ export default defineComponent({
       .illustrationBox{
         width: 60%;
         margin: auto;
-      }
-    }
-  }
-  .logo_box{
-    height: 3rem;
-    img{
-      &.big{
-        display: none;
-      }
-      &.small{
-        display: block;
       }
     }
   }

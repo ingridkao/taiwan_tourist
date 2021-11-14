@@ -16,7 +16,7 @@ export default defineComponent({
       citiyOption: citiy,
       cityBoxToggle:false,
       citySelect: null,
-      keyword: this.searchtext
+      keyword: ''
     }
   },
   created(){
@@ -43,7 +43,13 @@ export default defineComponent({
       if(to.params && to.params.city){
         this.citySelect = citiy[to.params.city] 
       }
-    } 
+    },
+    searchtext(){
+      this.keyword = this.searchtext
+    },
+    landingPage(){
+      this.cityBoxToggle = this.landingPage
+    }
   },
   methods:{
     bodyClose(e) {
@@ -73,7 +79,7 @@ export default defineComponent({
 })
 </script>
 <template>
-  <aside>
+  <div id="main_selector">
     <div v-if="!landingPage" class="selectBox text">
       <div class="inputBox">
         <input type="text" v-model="keyword" placeholder="搜尋關鍵字">
@@ -104,15 +110,16 @@ export default defineComponent({
         @click="citySelect = item"
       >{{item}}</button>
     </div>
-    <button class="search" v-if="citySelect" @click="startSearch">開始搜尋</button>
-  </aside>
+    <button class="search" :class="{show: citySelect}" @click="startSearch">開始搜尋</button>
+  </div>
 </template>
 
 <style scoped lang="scss">
-aside{
+#main_selector{
   display: flex;
   flex-direction: column;
   margin: 1rem;
+  max-width: 14rem;
   >*{
     display: flex;
     flex-wrap: wrap;
@@ -145,20 +152,17 @@ aside{
     }
     button{
       width: 1em;
+      height: 1em;
       padding: 0;
     }
   }
   >button{
     flex: 0 0 2rem;
-    height: 1.5rem;
+    height: 1.3rem;
+    padding: 0;
   }
 }
 button{
-  background: transparent;
-  border: none;
-  img{
-    height: 100%;
-  }
   &.arrow{
     padding: 0;
     transform: rotate(-180deg);
@@ -182,6 +186,7 @@ button{
   button{
     flex: 0 0 4rem;
     border: 1px solid #3FB195;
+    font-size: 0.9rem;
     &.selected{
       background: #3FB195;
       color: #FFFFFF;
@@ -189,13 +194,15 @@ button{
   }
 }
 .search{
-  display: block;
-  width: 10rem;
+  visibility: hidden;
   background: #3FB195;
   color: #FFFFFF;
-  font-size: 18px;
+  font-size: 1rem;
   margin: 0.5rem auto;
-  text-align: center;
+  justify-content: center;
+  &.show{
+    visibility: visible;
+  }
 }
 @media only screen and (max-width: 640px) {
   .selectBox{
