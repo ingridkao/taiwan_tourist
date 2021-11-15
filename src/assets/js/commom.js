@@ -26,8 +26,8 @@ export const GetTdxData = (inputUrl, params={}) => {
         paramsObj['$orderby'] = 'SrcUpdateTime'
     }
     const searchParams = new URLSearchParams(paramsObj)
-    const fetchurl = `${init}${inputUrl? inputUrl: '/v2/Rail/TRA/Station'}${searchParams.toString() === ''? '': '?' + searchParams.toString()}`
-    return axios.get(fetchurl,{
+    const fetchurl = (inputUrl)? inputUrl: '/v2/Rail/TRA/Station'
+    return axios.get(`${init}${fetchurl}?${searchParams.toString()}`,{
         headers: GetAuthorizationHeader()
     })
     .then((response) => {
@@ -101,22 +101,22 @@ export const apiType = [
         name: '景點',
         url: '/v2/Tourism/ScenicSpot'
     },
-    // {
-    //     index: 'Activity',
-    //     title: '觀光活動',
-    //     name: '活動',
-    //     url: '/v2/Tourism/Activity'
-    // },
-    // {
-    //     index: 'Restaurant',
-    //     title: '美食品嚐',
-    //     name: '餐飲',
-    //     url: '/v2/Tourism/Restaurant'
-    // },
-    // {
-    //     index: 'Hotel',
-    //     title: '住宿推薦',
-    //     name: '住宿',
-    //     url: '/v2/Tourism/Hotel'
-    // }
+    {
+        index: 'Activity',
+        title: '觀光活動',
+        name: '活動',
+        url: '/v2/Tourism/Activity'
+    },
+    {
+        index: 'Restaurant',
+        title: '美食品嚐',
+        name: '餐飲',
+        url: '/v2/Tourism/Restaurant'
+    },
+    {
+        index: 'Hotel',
+        title: '住宿推薦',
+        name: '住宿',
+        url: '/v2/Tourism/Hotel'
+    }
 ]

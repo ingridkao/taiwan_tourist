@@ -14,6 +14,7 @@ import calling from '/src/assets/img/Calling.svg'
 import LogoMini from '/src/assets/img/logo_mini.svg'
 
 import PageHeader from "/src/components/PageHeader.vue"
+import Cards from "/src/components/Cards.vue"
 
 export default defineComponent({
   data(){
@@ -38,7 +39,7 @@ export default defineComponent({
   },
   watch: {
     $route(to, from) {
-      if(to.params && to.params.city){
+      if(to.name != from.name && to.params && to.params.city){
         this.currentCity = to.params.city
         this.fetchData()
       }
@@ -47,7 +48,7 @@ export default defineComponent({
       this.fetchData()
     }
   },
-  components: {PageHeader},
+  components: {PageHeader, Cards},
   methods: {
     fetchData(){
       if(this.currentCity){
@@ -98,7 +99,7 @@ export default defineComponent({
       })
     },
     getCity(target, index){
-      return apiType[target]? apiType[target][index]: '-'
+      return apiType[target]? apiType[target][index]: ''
     }
   }
 })
@@ -123,36 +124,10 @@ export default defineComponent({
           </div>
           <button class="textBtn" @click="routeToPage3(getCity(dataIndex, 'index'))">更多{{getCity(dataIndex,'name')}}推薦</button>
         </h4>
-        <div class="card_container">
-          <div v-for="(cardItem, cardIndex) in dataItem" :key="cardIndex" class="cardItem" @click="routeToPage4(cardItem)">
-            <div v-if="cardItem.Picture && cardItem.Picture.PictureUrl1" class="imgBox">
-              <img :src="cardItem.Picture.PictureUrl1" :alt="cardItem.Picture.PictureDescription1">
-            </div>
-            <div v-else class="imgBox">
-              <img :src="Illustration" alt="沒有圖片">
-            </div>
-            <div class="textBox">
-              <h5 class="ellipsis">
-                {{cardItem.Name}}
-              </h5>
-              <h6 class="iconText" v-if="dataIndex !== 3">
-                <img :src="Time">
-                <span v-if="cardItem.Cycle" class="ellipsis">{{cardItem.Cycle}}</span>
-                <span v-else-if="cardItem.StartTime || cardItem.EndTime" class="ellipsis">{{(cardItem.StartTime)? cardItem.StartTime.slice(0, 10): '' }} ~ {{(cardItem.EndTime)? cardItem.EndTime.slice(0, 10): '' }}</span>
-                <span v-else class="ellipsis">{{cardItem.OpenTime? cardItem.OpenTime: '-'}}</span>
-              </h6>
-              <h6 class="iconText">
-                <img :src="loction_g">
-                <span v-if="cardItem.Address" class="ellipsis">{{cardItem.Address}}</span>
-                <span v-else>{{cardItem.Location? cardItem.Location: (cardItem.Class3? cardItem.Class3: (cardItem.Class2? cardItem.Class2: cardItem.Class))}}</span>
-              </h6>
-              <h6 class="iconText" v-if="dataIndex === 3">
-                <img :src="calling">
-                {{cardItem.Phone? cardItem.Phone: '-'}}
-              </h6>
-            </div>
-          </div>
+        <div class="card_container" v-if="dataItem.length > 0">
+          <Cards v-for="(cardItem, cardIndex) in dataItem" :key="dataIndex + '' + cardIndex" :cardItem="cardItem" :currentType="getCity(dataIndex, 'index')"/>
         </div>
+        <div v-else>Nodata</div>
       </div>
     </div>
   </div>
@@ -171,6 +146,7 @@ $shadow: 0px 14px 24px rgba(0, 0, 0, 0.04);
     border-radius: 16px;
     margin-bottom: 1rem;
     padding: 1rem 1rem 0 1rem;
+    overflow: hidden;
     >div{
       flex: 0 0 6rem;
     }
@@ -187,26 +163,6 @@ $shadow: 0px 14px 24px rgba(0, 0, 0, 0.04);
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-  }
-}
-.cardItem{
-  flex: 0 0 32%;
-  border-radius: 16px;
-  overflow: hidden;
-  background: #fff;
-  cursor: pointer;
-  margin: 0.5rem 0;
-  box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.04);
-  .imgBox{
-    height: 12rem;
-    overflow: hidden;
-    text-align: center;
-    img{
-      height:  100%;
-    }
-  }
-  .textBox{
-    padding: 0.5rem 1rem 1rem 1rem;
   }
 }
 

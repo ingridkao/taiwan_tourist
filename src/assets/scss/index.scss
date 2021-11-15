@@ -4,7 +4,7 @@ $whiteColor: #fff;
 $textColor: #2c3e50;
 
 $borderRadius: 8px;
-$asideWidth: 14rem;
+$asideWidth: 16rem;
 $padding: 0.5rem;
 
 *{
@@ -73,6 +73,10 @@ h6{
     color: rgba($textColor,0.9);
     font-size: 1rem;
     font-weight: normal;
+    &.title{
+        color: $primaryColor;
+        font-weight: bold;
+    }
 }
 
 .ellipsis{
@@ -177,8 +181,6 @@ h6{
     }
 }
 
-
-
 .card_container{
     display: flex;
     flex-direction: row;
@@ -187,6 +189,18 @@ h6{
     justify-content: space-between;
     width: 100%;
     padding-bottom: $padding*2;
+    overflow: scroll;
+}
+
+.imgBox{
+    border-radius: $borderRadius*2;
+    overflow: hidden;
+    text-align: right;
+    >*{height: 100%;}
+    .imgDiv{
+        background-size: cover;
+        background-position: center;
+    }
 }
 
 .cardItem{
@@ -202,16 +216,18 @@ h6{
         height: 12rem;
         text-align: center;
         border-radius: $borderRadius*2 $borderRadius*2 0px 0px;
-        overflow: hidden;
-        >*{height: 100%;}
-        .imgDiv{
-            background-size: cover;
-            background-position: center;
-        }
     }
-    .textBox{
-        padding: $padding $padding*2;
-        box-sizing: border-box;
+}
+
+.textBox{
+    padding: $padding $padding*2;
+    box-sizing: border-box;
+    &.desc{
+        border-radius: $borderRadius;
+        background: lighten($primaryColor, 45);
+        h6{
+            margin-bottom: 0.5rem;
+        }
     }
 }
 
@@ -224,6 +240,15 @@ h6{
     }
     &.inline{
       display: inline-flex;
+    }
+    &.top{
+        align-items: flex-start;
+    }
+}
+.hrefBox{
+    margin-left: 2rem;
+    &.right{
+        text-align: right;
     }
 }
 
@@ -259,6 +284,13 @@ h6{
     }
 }
 @media only screen and (max-width: 640px) {
+    .card_container{
+        flex-wrap: nowrap;
+        .cardItem{
+            min-width: 14rem;
+            margin-right: .5rem;
+        }
+    }
     .logo_box{
         height: 3rem;
         img{

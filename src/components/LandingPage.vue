@@ -68,9 +68,6 @@ export default defineComponent({
       align-items: center;
       flex: 1;
     }
-    >aside{
-      flex: 0 0 14rem;
-    }
     .illustrationBox{
       flex-grow: 1;
       flex-shrink: 1;

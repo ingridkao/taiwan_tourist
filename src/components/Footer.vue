@@ -37,7 +37,7 @@ export default defineComponent({
 </script>
 <template >
 <footer id="pageFooter" v-if="!landingPage">
-  <div>
+  <div class="minimap">
     <TaiwanMap @info="hoverCityInfo" @update="updateLocation"/>
   </div>
   <div class="alignMiddle">
@@ -46,7 +46,7 @@ export default defineComponent({
     <p>API Source： <a href="https://tdx.transportdata.tw/api-service/swagger" target="_blank"> 交通部PTX服務平臺 </a></p>
     <p>Repositories： <a href="https://github.com/ingridkao/taiwan_tourist" target="_blank"> GitHub </a></p>
     <br>
-    <p>點選<b>{{hoverCity? hoverCity: '該縣市'}}</b>進入City Guide頁面</p>
+    <p class="minimap">點選<b>{{hoverCity? hoverCity: '該縣市'}}</b>進入City Guide頁面</p>
   </div>
 </footer>
 </template>
@@ -66,5 +66,13 @@ footer{
     margin: 0 .25rem;
   }
 }
-
+@media only screen and (max-width: 640px) {
+  footer{
+    height: auto;
+    justify-content: flex-start;
+    .minimap{
+      display: none;
+    }
+  }
+}
 </style>

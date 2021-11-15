@@ -2,22 +2,26 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
+    data(){
+        return {
+            name: ''
+        }
+    },
     methods:{
         handleStateHover(e){
-            const {name} = e.target.dataset
-            if(name){ this.$emit('info', name) }
+            if(e.target.dataset && e.target.dataset.name){
+                this.$emit('info', e.target.dataset.name)
+            }
         },
         handleStateClick(e){
-            const {name} = e.target.dataset
-            if(name){ this.$emit('update', name) }
+            if(e.target.dataset && e.target.dataset.name){ this.$emit('update', e.target.dataset.name) }
         }
     }
 })
 </script>
 
 <template>
-<svg id="cf503461-00bd-459a-aeb5-062ebc913211" 
-    xmlns="http://www.w3.org/2000/svg" 
+<svg xmlns="http://www.w3.org/2000/svg" 
     viewBox="0 0 595.28 841.89"
     @mouseover="handleStateHover"
     @click="handleStateClick">

@@ -68,6 +68,11 @@ export default defineComponent({
           }
         })
       }else{
+        this.$router.push({ 
+          params: { 
+            city: cityIndex
+          }
+        })
         this.$store.commit("keyinKeyword", this.keyword)
       }
     },
@@ -119,7 +124,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   margin: 1rem;
-  max-width: 14rem;
+  max-width: 16rem;
   >*{
     display: flex;
     flex-wrap: wrap;
@@ -187,6 +192,7 @@ button{
     flex: 0 0 4rem;
     border: 1px solid #3FB195;
     font-size: 0.9rem;
+    padding: 0.25rem;
     &.selected{
       background: #3FB195;
       color: #FFFFFF;

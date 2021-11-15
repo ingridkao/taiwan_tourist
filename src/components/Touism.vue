@@ -5,7 +5,6 @@ import { mapState } from "vuex"
 import {GetTdxData} from "/src/assets/js/commom.js"
 import {citiy, apiType} from "/src/assets/js/commom.js"
 
-import PageHeader from "/src/components/PageHeader.vue"
 import Cards from "/src/components/Cards.vue"
 
 export default defineComponent({
@@ -20,21 +19,20 @@ export default defineComponent({
       processData: []
     }
   },
-  created(){
-    this.checkParams(this.$route.params)
-  },
   mounted() {
-    this.fetchData()
+    this.checkParams(this.$route.params)
   },
   watch: {
     $route(to, from) {
-      this.checkParams(to.params)
+      if(to.name != from.name){
+        this.checkParams(to.params)
+      }
     },
     searchtext(){
       this.fetchData()
     }
   },
-  components: {PageHeader, Cards},
+  components: {Cards},
   computed: {
     ...mapState(["searchtext", "navToggle", "fullPage"]),
     pageCount(){
@@ -108,11 +106,11 @@ export default defineComponent({
 
       <div v-if="mainData.length > 0" class="pagination">
         <!-- <button v-for="(page, pageIndex) in pageCount" :key="pageIndex" @click="changePage(page)">{{page}}</button> -->
-        <button @click="changePage(1)" :class="{active:currentPage===1}">1</button>
+        <button v-if="currentPage>1" @click="changePage(1)" :class="{active:currentPage===1}">1</button>
         <span v-if="currentPage>3">...</span>
         <button v-if="currentPage>2" @click="changePage(currentPage-1)">{{currentPage-1}}</button>
-        <button v-if="currentPage!==1 && currentPage!==pageCount" :class="{active:currentPage>1 && currentPage<pageCount}"  @click="changePage(currentPage)">{{currentPage}}</button>
-        <button v-if="currentPage!==pageCount" @click="changePage(currentPage+1)">{{currentPage+1}}</button>        
+        <button v-if="currentPage!==pageCount" :class="{active:currentPage>1 && currentPage<pageCount}"  @click="changePage(currentPage)">{{currentPage}}</button>
+        <button v-if="currentPage+1 < pageCount" @click="changePage(currentPage+1)">{{currentPage+1}}</button>        
         <span v-if="currentPage<pageCount-2">...</span>
         <button @click="changePage(pageCount)" :class="{active:currentPage===pageCount}">{{pageCount}}</button>
       </div>
