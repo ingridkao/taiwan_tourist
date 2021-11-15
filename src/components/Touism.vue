@@ -99,7 +99,7 @@ export default defineComponent({
       <h4 v-else>{{apiTypeTitle}}</h4>
     </header>
     <div class="mainData_container">
-      <div class="card_container" v-if="mainData.length > 0">
+      <div class="card_container touism" v-if="mainData.length > 0">
         <Cards v-for="(cardItem, cardIndex) in processData" :key="cardIndex" :cardItem="cardItem" :currentType="currentType"/>
       </div>
       <div v-else>Nodata</div>

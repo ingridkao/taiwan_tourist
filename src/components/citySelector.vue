@@ -70,7 +70,8 @@ export default defineComponent({
       }else{
         this.$router.push({ 
           params: { 
-            city: cityIndex
+            city: cityIndex,
+            type: this.$route.params.type
           }
         })
         this.$store.commit("keyinKeyword", this.keyword)

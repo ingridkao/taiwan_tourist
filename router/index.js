@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router"
+// export const baseURL = process.env.NODE_ENV === 'production'? '../taiwan_tourist/': '/'
+
 const routes = [
     {
       path: "/",
@@ -21,7 +23,9 @@ const routes = [
       component: () => import("/src/components/Information.vue"),
     }
 ]
+
 export default createRouter({
-    history: createWebHistory(),
-    routes
+  // history: createWebHistory(baseURL),
+  history: createWebHistory(location.pathname),
+  routes
 })

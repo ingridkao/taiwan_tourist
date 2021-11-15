@@ -114,7 +114,13 @@ export default defineComponent({
     },
     goBack(){
       if(this.currentType){
-        this.$router.go(-1)
+        this.$router.push({ 
+          name: 'Touism', 
+          params: { 
+            type: this.currentType,
+            city: this.currentCity,
+          }
+        })
       }else{
         this.$router.push({ 
           name: 'Guide', 
@@ -144,11 +150,11 @@ export default defineComponent({
         <div class="textBox desc">
           <h6 class="iconText" v-if="targetData.Cycle">
               <img :src="Time">
-              <span class="ellipsis">{{targetData.Cycle}}</span>
+              <span>{{targetData.Cycle}}</span>
           </h6>
           <h6 class="iconText" v-if="targetData.StartTime || targetData.EndTime">
               <img :src="Time">
-              <span class="ellipsis">{{(targetData.StartTime)? targetData.StartTime.slice(0, 10): '' }} ~ {{(targetData.EndTime)? targetData.EndTime.slice(0, 10): '' }}</span>
+              <span>{{(targetData.StartTime)? targetData.StartTime.slice(0, 10): '' }} ~ {{(targetData.EndTime)? targetData.EndTime.slice(0, 10): '' }}</span>
           </h6>
           <h6 class="iconText top" v-if="targetData.OpenTime">
               <img :src="Time">
@@ -156,11 +162,11 @@ export default defineComponent({
           </h6>
           <h6 class="iconText">
               <img :src="loction_g">
-              <span class="ellipsis">{{targetData.Location? targetData.Location: targetData.City}}</span>
+              <span>{{targetData.Location? targetData.Location: targetData.City}}</span>
           </h6>
           <h6 class="iconText" v-if="targetData.Address">
               <img :src="loction_g">
-              <span class="ellipsis">{{targetData.Address}}</span>
+              <span>{{targetData.Address}}</span>
           </h6>
           <h6 class="iconText">
               <img :src="calling">
@@ -222,6 +228,7 @@ export default defineComponent({
   flex-direction: row-reverse;
   align-items: flex-start;
   justify-content: space-between;
+  flex-wrap: wrap;
   padding: 1rem 0;
   .textBox{
     flex: 0 0 20rem;

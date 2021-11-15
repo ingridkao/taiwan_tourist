@@ -39,6 +39,11 @@ https://stackoverflow.com/questions/68131954/how-to-use-sass-using-in-vuejs3-vit
 `npm i --save vuex@next`
 
 - Leaflet & vue3 >> [參考](https://codesandbox.io/s/kxrup?file=/package.json:324-331)
+
+- 原本以為差不多了結果發現在vite的vue-router設定/path/的方式沒有用，後來用下面方式解決
+    - Vue Router Next erases nested URL Public path and redirects to root>> [參考](https://github.com/vuejs/vue-router-next/issues/312)
+    - vue router history mode [連結](https://github.com/vitejs/vite/issues/2122)
+    - vite.config.js裡面也把base改成絕對路徑，所以不確定是因為哪一個設定成功
 ### ToDo list
 - API error
 - NoData的狀態
