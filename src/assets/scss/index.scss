@@ -106,7 +106,7 @@ h6{
             left:0;
         }
     }
-    #main_container {
+    .main_container {
         position: relative;
         width: 100vw;
         &.fullPage{
@@ -169,7 +169,7 @@ h6{
 
 }
 
-#main_container {
+.main_container {
     flex-direction: column;
     width: 100vw;
     .page_container{
@@ -186,10 +186,12 @@ h6{
     flex-direction: row;
     align-items: start;
     flex-wrap: nowrap;
-    justify-content: space-between;
     width: 100%;
     padding-bottom: $padding*2;
     overflow: scroll;
+    &.more{
+        justify-content: space-between;
+    }
     &.touism{
         flex-wrap: wrap;
     }
@@ -244,6 +246,11 @@ h6{
     align-items: center;
     img{
       margin-right: $padding;
+    }
+    button{
+        width: 3rem;
+        height: 2rem;
+        padding: 0;
     }
     &.inline{
       display: inline-flex;

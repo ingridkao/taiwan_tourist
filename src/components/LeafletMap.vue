@@ -3,17 +3,39 @@ import { defineComponent } from "vue"
 import L from "leaflet"
 
 import "leaflet/dist/leaflet.css"
+
+const blackIcon = new L.Icon({
+  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+})
+const greenIcon = new L.Icon({
+  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+})
 export default defineComponent({
   data() {
     return {
       map: null,
-      position: []
+      position: [],
+      parkingPos: [],
     }
   },
   props: {
     location: {
         type: Array,
         default: () => [0,0]
+    },
+    parking: {
+        type: Object,
+        default: () => {}
     },
   },
   mounted() {
@@ -23,7 +45,10 @@ export default defineComponent({
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.map);
-    L.marker(this.position).addTo(this.map);
+    L.marker(this.position, { icon: blackIcon }).addTo(this.map)
+    if(this.parkingPos.length > 0){
+      L.marker(this.parkingPos, { icon: greenIcon }).addTo(this.map)
+    }
   },
   onBeforeUnmount() {
     if (this.map) {
@@ -36,7 +61,10 @@ export default defineComponent({
         this.position = [25.056, 121.50]
       }else{
         this.position = this.location
-      }  
+      }
+      if(this.parking.PositionLat && this.parking.PositionLon){
+        this.parkingPos = [this.parking.PositionLat, this.parking.PositionLon]
+      }
     }
   }
 })

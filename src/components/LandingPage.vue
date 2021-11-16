@@ -5,7 +5,6 @@ import place_data from "/src/data/placeData.js"
 import {GetTdxData} from "/src/assets/js/commom.js"
 
 import Logo from '/src/assets/img/logo.svg'
-import LogoMini from '/src/assets/img/logo_mini.svg'
 import Illustration from '/src/assets/img/illustration.svg'
 
 import CitySelector from "/src/components/CitySelector.vue"
@@ -15,7 +14,6 @@ export default defineComponent({
   data(){
     return {
       Logo,
-      LogoMini,
       Illustration,
       place_data,
       location: '',
@@ -38,7 +36,6 @@ export default defineComponent({
     <header>
       <div class="logo_box">
         <img :src="Logo" alt="Travel" class="big">
-        <img :src="LogoMini" alt="Travel" class="small">
       </div>
     </header>
     <main>
@@ -81,13 +78,19 @@ export default defineComponent({
 }
 @media only screen and (max-width: 640px) {
   .container{
+    >*{
+      padding: 0;
+    }
     main{
       flex-direction: column-reverse;
       height: auto;
       .illustrationBox{
-        width: 60%;
+        width: 80%;
         margin: auto;
       }
+    }
+    #main_selector{
+      max-width: none;
     }
   }
 }

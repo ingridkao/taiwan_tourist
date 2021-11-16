@@ -2,14 +2,12 @@
 import { defineComponent } from "vue"
 import { mapState } from "vuex"
 
-import Close from '/src/assets/img/close.svg'
 import Search from '/src/assets/img/Search.svg'
 import Arrow from '/src/assets/img/arrow.svg'
 import {citiy} from "/src/assets/js/commom.js"
 export default defineComponent({
   data(){
     return {
-      Close,
       Search,
       Arrow,
       routeName: null,
@@ -76,10 +74,6 @@ export default defineComponent({
         })
         this.$store.commit("keyinKeyword", this.keyword)
       }
-    },
-    clearSearch(){
-      this.keyword = ''
-      this.$store.commit("keyinKeyword", this.keyword)
     }
   }
 })
@@ -90,19 +84,13 @@ export default defineComponent({
       <div class="inputBox">
         <input type="text" v-model="keyword" placeholder="搜尋關鍵字">
       </div>
-      <button v-if="keyword != ''" @click="clearSearch">
-        <img :src="Close" alt="Close"/>
-      </button>
-      <button v-else>
+      <button>
         <img :src="Search" alt="Search"/>
       </button>
     </div>
     <div class="selectBox">
       <div class="inputBox">
         <p>{{citySelect? citySelect: '目的地'}}</p>
-        <button v-if="citySelect && landingPage" @click="citySelect = null">
-          <img :src="Close" alt="Close"/>
-        </button>
       </div>
       <button class="arrow" :class="{open: cityBoxToggle}" @click.stop="cityBoxToggle = !cityBoxToggle">
         <img :src="Arrow" alt="arrow"/>

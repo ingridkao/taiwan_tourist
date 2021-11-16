@@ -1,10 +1,6 @@
 <script>
 import {defineComponent } from 'vue'
-import { mapState } from "vuex"
-
 import AsideMenu from './components/AsideMenu.vue'
-import PageHeader from './components/PageHeader.vue'
-import Footer from './components/Footer.vue'
 
 export default defineComponent({
   created(){
@@ -13,11 +9,7 @@ export default defineComponent({
   destroyed(){
     window.removeEventListener("resize", this.detectWindowWidth);
   },
-  components: {AsideMenu, PageHeader, Footer},
-  computed:{
-    ...mapState(["fullPage"])
-  },
-
+  components: {AsideMenu},
   methods: {
     detectWindowWidth(){
       this.$store.commit("detectWidth", window.innerWidth)
@@ -27,10 +19,13 @@ export default defineComponent({
 </script>
 
 <template>
-  <AsideMenu/>
-  <main id="main_container" :class="{fullPage}">
-    <PageHeader/>
-    <router-view />
-    <Footer/>
-  </main>
+  <div id="appPage" v-cloak>
+    <AsideMenu/>
+    <router-view/>
+  </div>
 </template>
+<style>
+[v-cloak]{
+  display: none;
+}
+</style>

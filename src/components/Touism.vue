@@ -5,11 +5,16 @@ import { mapState } from "vuex"
 import {GetTdxData} from "/src/assets/js/commom.js"
 import {citiy, apiType} from "/src/assets/js/commom.js"
 
+import ArrowLeft from '/src/assets/img/ArrowLeft.svg'
+
+import PageHeader from "/src/components/PageHeader.vue"
+import Footer from "/src/components/Footer.vue"
 import Cards from "/src/components/Cards.vue"
 
 export default defineComponent({
   data(){
     return {
+      ArrowLeft,
       currentCity : null,
       currentType : null,
       mainData: [],
@@ -24,7 +29,7 @@ export default defineComponent({
   },
   watch: {
     $route(to, from) {
-      if(to.name != from.name){
+      if(to.params && to.params.city != from.params.city){
         this.checkParams(to.params)
       }
     },
@@ -32,7 +37,7 @@ export default defineComponent({
       this.fetchData()
     }
   },
-  components: {Cards},
+  components: {PageHeader, Footer, Cards},
   computed: {
     ...mapState(["searchtext", "navToggle", "fullPage"]),
     pageCount(){
@@ -54,7 +59,7 @@ export default defineComponent({
         this.currentType = paramsObj.type
         this.fetchData()
       }else{
-        this.$router.push('/')
+        this.$router.push('/LandingPage')
       }
     },
     fetchData(){
@@ -76,7 +81,7 @@ export default defineComponent({
           })
         }
       }else{
-        this.$router.push('/')
+        this.$router.push('/LandingPage')
       }
     },
     setPageData(){
@@ -86,6 +91,14 @@ export default defineComponent({
     changePage(page){
       this.currentPage = page
       this.setPageData()
+    },
+    goBack(){
+      this.$router.push({ 
+        name: 'Guide', 
+        params: { 
+          city: this.currentCity
+        }
+      })
     }
   }
 })
@@ -93,11 +106,15 @@ export default defineComponent({
 </script>
 
 <template>
+<main class="main_container" :class="{fullPage}">
+  <PageHeader/>
   <div id="touismPage" class="page_container" :class="{hasHeader: !navToggle, fullPage}">
-    <header>
-      <h4 v-if="currentCity">{{cityTitle}}</h4>
-      <h4 v-else>{{apiTypeTitle}}</h4>
-    </header>
+    <h4 class="iconText">
+      <button @click="goBack"><img :src="ArrowLeft" alt="回上一頁"></button>
+      <span>
+        {{currentCity? cityTitle: apiTypeTitle}}
+      </span>
+    </h4>
     <div class="mainData_container">
       <div class="card_container touism" v-if="mainData.length > 0">
         <Cards v-for="(cardItem, cardIndex) in processData" :key="cardIndex" :cardItem="cardItem" :currentType="currentType"/>
@@ -116,4 +133,6 @@ export default defineComponent({
       </div>
     </div>
   </div>
+    <Footer/>
+</main>
 </template>

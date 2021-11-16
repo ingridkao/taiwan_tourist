@@ -14,6 +14,7 @@ import calling from '/src/assets/img/Calling.svg'
 import LogoMini from '/src/assets/img/logo_mini.svg'
 
 import PageHeader from "/src/components/PageHeader.vue"
+import Footer from "/src/components/Footer.vue"
 import Cards from "/src/components/Cards.vue"
 
 export default defineComponent({
@@ -48,7 +49,7 @@ export default defineComponent({
       this.fetchData()
     }
   },
-  components: {PageHeader, Cards},
+  components: {PageHeader, Footer, Cards},
   methods: {
     fetchData(){
       if(this.currentCity){
@@ -72,10 +73,10 @@ export default defineComponent({
               console.log(error);
           })
         }else{
-          this.$router.push('/')
+          this.$router.push('/LandingPage')
         }
       }else{
-         this.$router.push('/')
+         this.$router.push('/LandingPage')
       }
     },
     routeToPage3(target){
@@ -106,6 +107,8 @@ export default defineComponent({
 </script>
 
 <template>
+<main class="main_container" :class="{fullPage}">
+  <PageHeader/>
   <div id="guidePage" class="page_container" :class="{hasHeader: !navToggle, fullPage}">
     <header>
       <div>
@@ -124,13 +127,15 @@ export default defineComponent({
           </div>
           <button class="textBtn" @click="routeToPage3(getCity(dataIndex, 'index'))">更多{{getCity(dataIndex,'name')}}推薦</button>
         </h4>
-        <div class="card_container" v-if="dataItem.length > 0">
+        <div class="card_container" v-if="dataItem.length > 0" :class="{more: dataItem.length > 2}">
           <Cards v-for="(cardItem, cardIndex) in dataItem" :key="dataIndex + '' + cardIndex" :cardItem="cardItem" :currentType="getCity(dataIndex, 'index')"/>
         </div>
         <div v-else>Nodata</div>
       </div>
     </div>
   </div>
+  <Footer/>
+</main>
 </template>
 
 <style lang="scss" scoped>

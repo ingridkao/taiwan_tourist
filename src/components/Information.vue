@@ -13,6 +13,8 @@ import loction from '/src/assets/img/Location.svg'
 import loction_g from '/src/assets/img/Location_g.svg'
 import calling from '/src/assets/img/Calling.svg'
 
+import PageHeader from "/src/components/PageHeader.vue"
+import Footer from "/src/components/Footer.vue"
 import Cards from "/src/components/Cards.vue"
 import LeafletMap from "/src/components/LeafletMap.vue"
 
@@ -52,7 +54,7 @@ export default defineComponent({
       }
     }
   },
-  components: {Cards, LeafletMap},
+  components: {Cards, LeafletMap, PageHeader, Footer},
   computed: {
     ...mapState(["navToggle", "fullPage", "informationObj"])
   },
@@ -136,6 +138,8 @@ export default defineComponent({
 </script>
 
 <template>
+<main class="main_container" :class="{fullPage}">
+  <PageHeader/>
   <div id="informationPage" class="page_container" :class="{hasHeader: !navToggle, fullPage}">
     <div v-if="targetData" class="targetDataBox">
       <h4 class="iconText">
@@ -184,20 +188,16 @@ export default defineComponent({
       </div>
       <div class="transportation">
         <div class="mapBox" v-if="mapShow">
-          <LeafletMap :location="position"/>
+          <LeafletMap :location="position" :parking="targetData.ParkingPosition"/>
         </div>
         <div class="mapDesc" v-if="targetData.ParkingInfo">
           <h6 class="title">停車資訊</h6>
           {{targetData.ParkingInfo}}
         </div>
-        <div class="mapDesc" v-if="targetData.ParkingPosition && Object.keys(targetData.ParkingPosition).length > 0">
-          <h6 class="title">交通方式</h6>
-          {{targetData.ParkingPosition}}
-        </div>
       </div>
       <div class="nearbyBox" v-if="nearbyData.length > 0">
         <h6 class="title">附近{{currentTypeTitle}}</h6>
-        <div class="card_container">
+        <div class="card_container" :class="{more: nearbyData.length > 2}">
           <Cards v-for="(cardItem, cardIndex) in nearbyData" :key="cardIndex" :cardItem="cardItem" :currentType="currentType"/>
         </div>
       </div>
@@ -207,14 +207,11 @@ export default defineComponent({
       <p>找不到{{currentTypeTitle}}</p>
     </div>
   </div>
+    <Footer/>
+</main>
 </template>
 
 <style lang="scss" scoped>
-.iconText button{
-  width: 3rem;
-  height: 2rem;
-  padding: 0;
-}
 .targetDataBox > div{
   margin: 1rem 0;
 }
