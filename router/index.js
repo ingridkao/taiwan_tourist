@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router"
-// export const baseURL = process.env.NODE_ENV === 'production'? '../taiwan_tourist/': '/'
+export const baseURL = process.env.NODE_ENV === 'production'? '/taiwan_tourist/': '/'
 
 const routes = [
     {
@@ -21,11 +21,15 @@ const routes = [
       path: "/information/:type/:city/:id",
       name: "Information",
       component: () => import("/src/components/Information.vue"),
-    }
+    },
+    //失效不知道為什麼
+    // {
+      // path: "*",
+    //   redirect:'/'
+    // }
 ]
 
 export default createRouter({
-  // history: createWebHistory(baseURL),
-  history: createWebHistory(location.pathname),
+  history: createWebHistory(baseURL),
   routes
 })

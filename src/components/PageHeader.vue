@@ -29,7 +29,7 @@ export default defineComponent({
   <button @click="toggleBtn">
     <img :src="toggle" alt="toggle" >
   </button>
-  <button @click="this.$router.push('/LandingPage')">
+  <button @click="this.$router.push('/')">
     <img :src="Logo" alt="Travel" >
   </button>
   <div></div>

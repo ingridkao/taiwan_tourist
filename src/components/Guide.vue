@@ -73,10 +73,10 @@ export default defineComponent({
               console.log(error);
           })
         }else{
-          this.$router.push('/LandingPage')
+          this.$router.push('/')
         }
       }else{
-         this.$router.push('/LandingPage')
+         this.$router.push('/')
       }
     },
     routeToPage3(target){
@@ -162,7 +162,6 @@ $shadow: 0px 14px 24px rgba(0, 0, 0, 0.04);
 }
 
 .mainData_container{
-  width: 100%;
   .titleBox{
     display: flex;
     flex-direction: row;

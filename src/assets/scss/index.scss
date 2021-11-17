@@ -151,6 +151,19 @@ h6{
                 height: 100%;
             }
         }
+        .mainData_container{
+            position: relative;
+            width: 100%;
+            min-height: 60vh;
+            .loadingBox {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                text-align: center;
+                margin: 25vh auto;
+            }
+        }
+
         #pageFooter{
             background-color: $textColor;
             color: $whiteColor;
@@ -269,6 +282,8 @@ h6{
 .pagination{
     color: $primaryColor;
     text-align: center;
+    width: 100%;
+    margin-top: 2rem;
     button{
         width: 2em;
         margin: 0 $padding;

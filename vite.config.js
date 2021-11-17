@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from "path";
 // const pathSrc = path.resolve(__dirname, "src");
-export const baseURL = process.env.NODE_ENV === 'production'? 'https://ingridkao.github.io/taiwan_tourist/': '/'
+export const baseURL = process.env.NODE_ENV === 'production'? '/taiwan_tourist/': '/'
 
 // https://vitejs.dev/config/
 export default defineConfig({
